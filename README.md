@@ -2,9 +2,46 @@ Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
 
 ### **Phase 1: Initial Setup and Deployment**
 
-**Step 1: Launch EC2 (Ubuntu 22.04):**
+**Step 1: Launch EC2 Amazon Linux with the userdata script:**
 
-- Provision an EC2 instance on AWS with Ubuntu 22.04.
+- Provision an EC2 instance on AWS with Amazon Linux.
+
+```bash
+#!/bin/bash
+
+# install git
+sudo yum update -y
+sudo yum install git -y
+
+# install jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y
+sudo dnf install java-17-amazon-corretto -y
+sudo yum install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+# install docker
+sudo yum install docker -y
+sudo usermod -a -G docker ec2-user
+sudo usermod -a -G docker jenkins
+sudo chmod 777 /var/run/docker.sock
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# install trivy
+sudo yum update -y
+sudo amazon-linux-extras install epel -y
+sudo yum install -y wget
+wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.rpm
+sudo yum install -y trivy_0.18.3_Linux-64bit.rpm
+
+# Run sonarqube image
+docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+    ```
+  
 - Connect to the instance using SSH.
 
 **Step 2: Clone the Code:**
@@ -13,7 +50,7 @@ Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
 - Clone your application's code repository onto the EC2 instance:
     
     ```bash
-    git clone https://github.com/Aakibgithuber/Deploy-Netflix-Clone-on-Kubernetes.git
+    git clone https://github.com/mushfiyasadaf/netflix.git
     ```
     
 
