@@ -40,7 +40,7 @@ sudo yum install -y trivy_0.18.3_Linux-64bit.rpm
 
 # Run sonarqube image
 docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
-    ```
+```
   
 - Connect to the instance using SSH.
 
