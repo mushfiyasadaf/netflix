@@ -32,5 +32,7 @@ sudo yum install -y trivy_0.18.3_Linux-64bit.rpm
 # Run sonarqube image
 docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
 
-
-
+# Clone github repository
+sudo git clone https://github.com/mushfiyasadaf/netflix.git
+cd netflix
+docker build --build-arg TMDB_V3_API_KEY=387ac505e6064673706d4efa36c05c45 -t netflix .
